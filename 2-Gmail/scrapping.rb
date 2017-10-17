@@ -16,7 +16,15 @@ require 'pp'
 		
 			doc = Nokogiri::HTML(open(url))
 			a=doc.xpath('//p[@class="Style22"]/font[@size="2"]')
-			email= a[10].text
+			email1= a[10].text
+			
+			#enlever les espaces devant les adresses, si vide, laisser un espace
+			length = email1.length
+			if length>2
+			email=email1[1..length]
+			else email=email1
+			end
+			
 			emails<<email
 		end
 		
@@ -24,6 +32,7 @@ require 'pp'
 		
 		#Mairies sous formes de array pour simplifier l'extraction json et csv
 		mairies2 = names.zip(emails).map {|name,email| [name, email]}
+		
 		
 		File.open("mairies27.json","w") do |f|
 		f.write(mairies2.to_json)
